@@ -1,0 +1,316 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
+  <style>
+input{
+  width: 50%;
+  background-color: whitesmoke;
+  color:  #4CAF50;
+  padding: 10px;
+  margin: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: width 0.4s ease-in-out;
+
+}
+
+input:hover {
+  background-color: #f8fff8;
+}
+    
+.center {
+  margin: auto;
+  width: 50%;
+  padding: 10px;
+  margin-top: 60px;
+  box-shadow: 5px 5px 30px grey;
+  text-align: center;
+}
+    
+button[type=submit] {
+  
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+ 
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+button[type=submit]:hover {
+  background-color: #45a049;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+div {
+  border-radius: 15px;
+  background-color:white;
+  color: dodgerblue;
+
+
+
+}
+label{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color:  dodgerblue;
+    padding-left: 10PX;
+    display: flex;
+    flex-direction: column;
+    font-weight: bolder;
+}
+  </style>
+</head>
+<body >
+  <h1 style="text-align: center;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: black;"> Bus Details</h1>
+  <form method="post" action="{% url 'create' %}" >
+  
+  <div class="center">
+    {% csrf_token %}<!-- Submit button to save the model -->
+    <label id="busname">Name</label>
+    <input type="text" id="busname" name="busaname" placeholder="Name">
+    <label id="bustype">Bustype</label>
+    <input type="text" id="bustype" name="bustype" placeholder="Type">
+    <label id="contact"> Contact</label>
+    <input type="number" id="contact" name="contact" placeholder="Contact">
+  </div>
+  <h3 style="text-align: center;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: rgb(23, 8, 160);"> Account Details</h3>
+
+  <div class="center">
+    <label id="fc">IFSC</label>
+    <input id="fc" name="ifsc" placeholder="IFSC">
+    <label id="acc">Account No</label>
+    <input type="number" id="acc" name="accountno" placeholder="Account No">
+    <label id="bank">Bank Name</label>
+    <input type="text" id="bank" name="bankname" placeholder="Bank Name">
+  </div>
+  <h3 style="text-align: center;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: rgb(23, 8, 160);"> Stop Details</h3>
+    <!--  <script>
+      var counter = 1;
+      var maxLimit = 10; // Set the maximum limit for input boxes
+  
+      function addInputBox() {
+        if (counter > maxLimit) {
+          return; // Stop adding input boxes if the limit is reached
+        }
+  
+        var inputContainer = document.getElementById("stops");
+  
+        var label = document.createElement("label");
+        label.textContent = "stop " + counter;
+        inputContainer.appendChild(label);
+  
+        var input = document.createElement("input");
+        input.type = "text";
+        input.id = "stop" + counter;
+        input.name = "stop" + counter;
+        input.placeholder = "stop" + counter;
+        
+        
+    
+      
+  
+        inputContainer.appendChild(input);
+        
+  
+        counter++;
+      }
+
+    </script>-->
+  <div class="center">
+     <label >Stop1</label>
+     <input type="text" id="stop1" name="stop1" placeholder="stop1" oninput="copyValue()">
+     <label >Stop2</label>
+     <input type="text" id="stop2" name="stop2" placeholder="stop2" oninput="copyValue()">
+     <label >Stop3</label>
+     <input type="text" id="stop3" name="stop3" placeholder="stop3" oninput="copyValue()">
+     <label >Stop4</label>
+     <input type="text" id="stop4" name="stop4" placeholder="stop4" oninput="copyValue()">
+     <label >Stop5</label>
+     <input type="text" id="stop5" name="stop5" placeholder="stop5" oninput="copyValue()">
+
+  </div>
+  <h3 style="text-align: center;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;color: rgb(23, 8, 160);"> Ticket Details</h3>
+
+  <div class="center">
+    <div>
+    <label1 for="ticket1" id="label1" ></label1>
+    <div id="ticket1"></div>
+    </div>
+    <div>
+    <label2 for="ticket2" id="label2" style="word-spacing: 10px;"></label2>
+    <div id="ticket2"></div>  
+    <div>
+    <label3 for="ticket3" id="label3" style="word-spacing: 10px;"></label3>
+    <div id="ticket3"></div>   
+    <div>
+    <label4 for="ticket4" id="label4" style="word-spacing: 10px;"></label4>
+    <div id="ticket4"></div>    
+    <div>
+    <label5 for="ticket5" id="label5" style="word-spacing: 10px;"></label5>
+    <div id="ticket5"></div>    
+    <div>
+    <label6 for="ticket6" id="label6" style="word-spacing: 10px;"></label6>
+    <div id="ticket6"></div>    
+    <div>
+    <label7 for="ticket7" id="label7" style="word-spacing: 10px;"></label7>
+    <div id="ticket7"></div>   
+    <div>
+    <label8 for="ticket8" id="label8" style="word-spacing: 10px;"></label8>
+    <div id="ticket8"></div>   
+    <div>
+    <label9 for="ticket9" id="label9" style="word-spacing: 10px;"></label9>
+    <div id="ticket9"></div>    
+    <div>
+    <label10 for="ticket10" id="label10" style="word-spacing: 10px;"></label10>
+    <div id="ticket10"></div>     
+    <button type="submit" value="next">submit</button>
+
+  </div>
+  
+
+
+  </form>
+<script>
+  function convertToLowercase(inputElement) {
+    inputElement.value = inputElement.value.toLowerCase();
+}
+  
+      function copyValue() {
+        var Value1 = document.getElementById("stop1").value;
+        var Value2 = document.getElementById("stop2").value;
+        var Value3 = document.getElementById("stop3").value;
+        var Value4 = document.getElementById("stop4").value;
+        var Value5 = document.getElementById("stop5").value;
+        
+        if (Value1 && Value2) {       
+          document.getElementById("label1").innerHTML = Value1 + "--TO--" + Value2; 
+          var inputContainer = document.getElementById("ticket1");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket1"
+            input.name = "ticket1"
+            input.placeholder = "ticket1"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value1 && Value3) {        
+          document.getElementById("label2").innerHTML = Value1 + "--TO--" + Value3;
+          var inputContainer = document.getElementById("ticket2");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket2"
+            input.name = "ticket2"
+            input.placeholder = "ticket2"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value1 && Value4) {        
+          document.getElementById("label3").innerHTML = Value1 + "--TO--" + Value4;
+          var inputContainer = document.getElementById("ticket3");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket3"
+            input.name = "ticket3"
+            input.placeholder = "ticket3"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value1 && Value5) {        
+          document.getElementById("label4").innerHTML = Value1 + "--TO--" + Value5;
+          var inputContainer = document.getElementById("ticket4");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket4"
+            input.name = "ticket4"
+            input.placeholder = "ticket4"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value2 && Value3) {       
+          document.getElementById("label5").innerHTML = Value2 + "--TO--" + Value3;
+          var inputContainer = document.getElementById("ticket5");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket5"
+            input.name = "ticket5"
+            input.placeholder = "ticket5"
+            inputContainer.appendChild(input); 
+          }
+        }
+        if (Value2 && Value4) {        
+          document.getElementById("label6").innerHTML = Value2 + "--TO--" + Value4;
+          var inputContainer = document.getElementById("ticket6");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket6"
+            input.name = "ticket6"
+            input.placeholder = "ticket6"
+            inputContainer.appendChild(input);
+          }
+
+        }
+        if (Value2 && Value5) {        
+          document.getElementById("label7").innerHTML = Value2 + "--TO--" + Value5;
+          var inputContainer = document.getElementById("ticket7");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket7"
+            input.name = "ticket7"
+            input.placeholder = "ticket7"
+            inputContainer.appendChild(input);
+          }
+
+        }
+        if (Value3 && Value4) {        
+          document.getElementById("label8").innerHTML = Value3 + "--TO--" + Value4;
+          var inputContainer = document.getElementById("ticket8");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket8"
+            input.name = "ticket8"
+            input.placeholder = "ticket8"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value3 && Value5) {        
+          document.getElementById("label9").innerHTML = Value3 + "--TO--" + Value5;
+          var inputContainer = document.getElementById("ticket9");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket9"
+            input.name = "ticket9"
+            input.placeholder = "ticket9"
+            inputContainer.appendChild(input);
+          }
+        }
+        if (Value4 && Value5) {        
+          document.getElementById("label10").innerHTML = Value4 + "--TO--" + Value5;
+          var inputContainer = document.getElementById("ticket10");
+          if (!inputContainer.firstChild){
+            var input = document.createElement("input");
+            input.type = "text";
+            input.id = "ticket10"
+            input.name = "ticket10"
+            input.placeholder = "ticket10"
+            inputContainer.appendChild(input);
+          }
+        }  
+
+      }
+</script>
+</body>
+  {% endblock %}

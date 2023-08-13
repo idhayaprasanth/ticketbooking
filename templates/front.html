@@ -1,0 +1,153 @@
+{% extends 'base.html' %} {% block content %} {% load static %}
+<head>
+  <style>
+    .center {
+      margin: auto;
+      margin-top: 250px;
+      width: 50%;
+      padding: 5px;
+      box-shadow: 5px 5px 10px grey;
+      display: flex;
+      flex-direction: column;
+    }
+    input[type="submit"] {
+      background-color: #4caf50;
+      color: white;
+      padding: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    input[type="text"] {
+      width: 50%;
+      background-color: whitesmoke;
+      color: #4caf50;
+      padding: 10px;
+      margin: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: width 0.4s ease-in-out;
+    }
+    nav {
+  float: left;
+  text-align: center;
+  width: 30%;
+  height: 200px; /* only for demonstration, should be removed */
+  background: #fdfdfd;
+  padding: 0px;
+  display: flex;
+  flex-direction: column;
+  color: #4841a1;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  
+ 
+}
+
+/* Style the list inside the menu */
+.nav ul {
+  list-style-type: none;
+  padding: 0;
+  
+
+}
+
+.article {
+  float: left;
+  padding: 20px;
+  width: 70%;
+  background-color: #f1f1f1;
+  height: 200px; /* only for demonstration, should be removed */
+}
+.section::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+   header {
+            box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+  background-color:white;
+  padding: 0px;
+  padding-left: 20px;
+  font-family:fantasy;
+  font-size: 20px;
+   }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="{% static 'image/logo.png' %} ">
+
+    
+    
+    <left style="padding-left:900px;">       
+      {% if user.is_authenticated %}
+    
+      <a  href="#">Welcome, {{user.username}}</a>
+      <a href="/logout"> <button>logout</button></a>
+    
+    
+     
+    
+
+    {% else %}
+
+    
+      <a style="padding-left:300px ;" href="/login"><button>Login</button></a>
+    
+
+    {% endif %}
+  </left>
+
+     
+    
+ 
+ </header>
+  <div class="center">
+    <section>
+      <nav>
+        <table>
+        {% for bus in detail %}
+        <tr> <img src="{{ bus.qr_code.url }}" alt="QR Code" style="width: 50%" /></tr>
+        <tr> <td style="color: #4841a1;">Name:</td><td>{{bus.busname}}</td></tr>
+        <tr><td style="color: #4841a1;">Type:</td><td>{{bus.bustype}}</td></tr>
+        <tr>
+          <td style="color: #4841a1;">Stops:</td>
+          <td style="color:dodgerblue;">{{bus.stop1}}</td>
+          <td><img src="https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/width-icon.svg" style="width: 30px;"></td>
+          <td style="color:dodgerblue;">{{bus.stop2}}</td>
+          <td ><img src="https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/width-icon.svg" style="width: 30px;"></td>
+          <td style="color:dodgerblue;">{{bus.stop3}}</td>
+          <td><img src="https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/width-icon.svg" style="width: 30px;"></td>
+          <td style="color:dodgerblue;">{{bus.stop4}}</td>
+          <td><img src="https://uxwing.com/wp-content/themes/uxwing/download/arrow-direction/width-icon.svg" style="width: 30px;"></td>
+          <td style="color:dodgerblue;">{{bus.stop5}}</td>
+        </tr>
+       
+       
+
+      
+       {% endfor %}
+      </table>
+      </nav>
+    <article>
+    <form action="{% url 'searchbar' %}" method="get">
+      <form>
+        <input
+          type="text"
+          required
+          name="input1"
+          placeholder="Starting Point"
+        />
+        <input type="text" required name="input2" placeholder="Destination" />
+        <input type="submit" value="Search" />
+      
+      </form>
+    </form>
+  </article>
+   
+  </section>
+  </div>
+</body>
+{% endblock %}              

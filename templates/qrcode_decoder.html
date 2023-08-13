@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+  {% extends 'base.html' %} {% block content %} {% load static %}
+
+  <head>
+    <title>
+      JQuery HTML5 QR Code Scanner using Instascan JS Example -
+      ItSolutionStuff.com
+    </title>
+    <style>
+      /* Hide the input field and the submit button initially */
+      #input1,
+      #submitBtn {
+        display: none;
+      }
+      header {
+        box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+        background-color: white;
+        padding: 0px;
+        padding-left: 20px;
+        font-family: fantasy;
+        font-size: 20px;
+      }
+      .button [type="submit"] {
+        background-color: #4caf50;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+      }
+      #preview {
+        position: absolute;
+        margin-left: 24%;
+        border: 3px solid rgb(1, 1, 17);
+      
+      }
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+  </head>
+  <body>
+    <header>
+      <img src="{% static 'image/logo.png' %} ">
+
+      <left style="padding-left: 900px;">
+        {% if user.is_authenticated %}
+        <a href="#">Welcome, {{user.username}}</a>
+        <a href="/logout"> <button>logout</button></a>
+        {% else %}
+        <a style="padding-left: 300px;" href="/login"><button>Login</button></a>
+        {% endif %}
+      </left>
+    </header>
+
+    <h1 style="color: #2e53a1;padding-left: 40%;">Scan QR Code</h1>
+    <form id="searchForm" action="{% url 'searchbar1' %}" method="get">
+      <input id="input1" type="text" name="input1" style="display: none;" />
+      <button
+        id="submitBtn"
+        type="submit"
+        value="search"
+        style="
+          background-color: #4caf50;
+          color: white;
+          padding: 10px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        "
+      >
+        Submit
+      </button>
+    </form>
+    <video id="preview"></video>
+
+    <!-- Add the submit button -->
+
+    <script type="text/javascript">
+      let scanner = new Instascan.Scanner({
+        video: document.getElementById("preview"),
+      });
+      var value1 = document.getElementById("input1");
+      var submitBtn = document.getElementById("submitBtn");
+
+      scanner.addListener("scan", function (content) {
+        // alert(content); // Shows the entire content of the scanned QR code
+        const regex = /busname:(.*)/; // Regular expression to match "busname:" followed by any characters
+        const match = content.match(regex);
+        if (match && match[1]) {
+          const busname = match[1].trim();
+          value1.value = busname; // Set the value of the input element with the extracted value
+          scanner.stop(); // Stop the scanner after successfully extracting busname
+          // Automatically submit the form
+          submitBtn.click();
+        } else {
+          alert('QR code does not contain the "busname" field.');
+        }
+      });
+
+      Instascan.Camera.getCameras()
+        .then(function (cameras) {
+          if (cameras.length > 0) {
+            scanner.start(cameras[0]);
+          } else {
+            console.error("No cameras found.");
+          }
+        })
+        .catch(function (e) {
+          console.error(e);
+        });
+    </script>
+  </body>
+  {% endblock %}
+</html>

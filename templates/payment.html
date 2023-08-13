@@ -1,0 +1,93 @@
+<!-- payment.html -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    {% if user.is_authenticated %}
+    <title>Payment</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+    <script>
+        var options = {
+            "key": "{{ rzp_test_AnaIDjG51UGeDW }}",
+            "amount": "{{ amount }}",
+            "currency": "INR",
+            "name": "booking",
+            "description": "poovathal",
+            "order_id": "{{ order_id }}",
+            "handler": function (response){
+                // Send the payment ID to the success view
+                var form = document.createElement('form');
+                form.method = 'post';
+                form.action = '/pay_id/';
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'razorpay_payment_id';
+                input.value = response.razorpay_payment_id;
+                form.appendChild(input);
+
+                
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'order_id';
+                input.value ="{{amount}}";
+                form.appendChild(input);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'bus';
+                input.value ="{{busname}}";
+                form.appendChild(input);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'stop1';
+                input.value ="{{stop1}}";
+                form.appendChild(input);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'stop2';
+                input.value ="{{stop2}}";
+                form.appendChild(input);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'qr';
+                input.value ="{{qr.url}}";
+                form.appendChild(input);
+
+                var input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = 'email';
+                input.value ="{{user.email}}";
+                form.appendChild(input);
+                
+                
+        
+
+                
+                // Add CSRF token to the form
+                var csrfToken = document.createElement('input');
+                csrfToken.type = 'hidden';
+                csrfToken.name = 'csrfmiddlewaretoken';
+                csrfToken.value = '{{ csrf_token }}';
+                form.appendChild(csrfToken);
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+           
+            "theme": {
+                "color": "#F37254"
+            }
+        };
+
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    </script>
+</body>
+{% endif %}
+</html>

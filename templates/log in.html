@@ -1,0 +1,32 @@
+{% block content %}      
+
+{% load crispy_forms_tags %}
+<style>
+.card {
+  background-color: white;
+  box-shadow: 0 10px 10px 0 rgba(17, 16, 16, 0.2);
+  margin-top: 200px;
+  max-width: 600px;
+  margin-left: 350px;
+  text-align: left;
+  
+  
+  font-family: arial;}
+</style>
+
+<body style="background-color:whitesmoke">
+<!--Login--> 
+<div class="card">
+<div class="container py-5">
+  <h1>Login</h1>
+  <form method="POST">
+    {% csrf_token %}
+    {{ login_form|crispy }}
+    <button class="btn btn-primary" type="submit">Login</button>
+  </form>
+  <p class="text-center">Don't have an account? <a href="/signup">Create an account</a>.</p>
+</div>
+</div>
+
+{% endblock %}
+</body>
