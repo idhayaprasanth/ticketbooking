@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Details</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background: #f0f2f5;
+            font-family: 'Arial', sans-serif;
+        }
+
+        p{
+            padding-bottom: 6px;
+            border-bottom: 1px groove gainsboro;
+
+
+        }
+        
+        .ticket-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ticket-header {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .ticket-body {
+            padding: 20px;
+        }
+
+        .route-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 0;
+            position: relative;
+        }
+
+        .route-line {
+            flex-grow: 1;
+            height: 4px;
+            background: linear-gradient(to right, #00c6ff, #0072ff);
+            position: relative;
+            margin: 0 10px;
+            border-radius: 2px;
+        }
+
+        .stop {
+            font-size: 16px;
+            font-weight: bold;
+            background: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .stop-icon {
+            font-size: 18px;
+            color: #0072ff;
+            margin-right: 5px;
+        }
+
+        .qr-code {
+            max-width: 100px;
+            display: block;
+            margin: 15px auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .ticket-footer {
+            background: #f9f9f9;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            color: #0072ff;
+            border-radius: 0 0 10px 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container mt-5">
+        <div class="text-center mb-4">
+            <h2 class="text-primary fw-bold">Your Travel Tickets</h2>
+            <p class="fw-semibold">Logged in as: <span class="text-secondary">{{ email }}</span></p>
+        </div>
+
+        {% if payments %}
+            <div class="row">
+                {% for payment in payments %}
+                <div class="col-md-6 col-lg-4">
+                    <div class="ticket-card">
+                        <div class="ticket-header">Payment ID: {{ payment.payment_id }}</div>
+                        <div class="ticket-body">
+                            <p><strong>Passengers</strong> {{ payment.passengers }}</p>
+                            <p><strong>Amount:</strong> <span class="text-success fw-bold">₹{{ payment.amount }}</span></p>
+                            <p><strong>Bus Name:</strong> {{ payment.bus_name }}</p>
+
+                            <!-- Travel Route -->
+                            <div class="route-container">
+                                <span class="stop">{{ payment.stop1 }}</span>
+                                <div class="route-line"></div>
+                                <span class="stop">{{ payment.stop2 }}</span>
+                            </div>
+
+                            {% if payment.qr_code %}
+                                <img src="{{ payment.qr_code }}" alt="QR Code" class="qr-code">
+                            {% endif %}
+                        </div>
+                        <div class="ticket-footer">
+                             {{ payment.date }} |  {{ payment.time }}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-warning text-center">
+                No tickets found for this email.
+            </div>
+        {% endif %}
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<html>
+  {% extends 'base.html' %}
+  {% block content %}
+  {% load static %}
+  <head>
+  <style>
+    header {
+            box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+  background-color:white;
+  padding: 0px;
+  padding-left: 20px;
+  font-family:fantasy;
+  font-size: 20px;
+  
+  
+  
+  
+}
+ .right{
+  text-align: right;
+ }
+left{
+  font-family:'Courier New', Courier, monospace;
+  color:black;
+  padding-left: 1100px;
+  text-align: right;}
+ 
+nav {
+  box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.2);
+  float: left;
+  width: 250px;
+  height: 300px; /* only for demonstration, should be removed */
+  background: white;
+  padding: 0px;
+  margin-left: 50px;
+  text-align: left;
+  
+}
+.card {
+  box-shadow: 0 10px 10px 0 rgba(17, 16, 16, 0.2);
+  width: 150px;
+  text-align: center;
+  font-family: arial;
+  align-items: center;
+  margin-top: 100px;
+  height: 150px;
+}
+.center{
+    padding-left:200px ;
+    text-align:center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between ;
+    padding-right: 200px;
+    
+  }
+  button {
+  
+  background-color: #4CAF50;
+  color: white;
+  padding: 14px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+  
+  
+
+  </style>
+  </head>
+
+  <body style="background-image:url{% static 'image/bus.gif' %}  ;background-repeat:no-repeat;background-position: center;">
+    <header>
+     
+
+      <img src="{% static 'image/logo.png' %} ">
+
+      
+      
+      <left style="padding-left:900px;">       
+        {% if user.is_authenticated %}
+      
+        <a  href="#">Welcome, {{user.username}}</a>
+        <a href="/logout"> <button>logout</button></a>
+      
+      
+       
+      
+
+      {% else %}
+
+      
+        <a style="padding-left:300px ;" href="/login"><button>Login</button></a>
+      
+
+      {% endif %}
+    </left>
+
+       
+      
+   
+   </header>
+   <p style="font-family:Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;font-size:25px;color:rgb(113, 113, 255);text-align:center ;"> Bus Timing</p>
+  <div class="center">
+    <div class="card" >  
+      <img src="{% static 'image/logo.png' %} " style="margin-top: 10px;padding-top: 10px;"> 
+      <a href="/create"><button> create bus </button> </a>
+    </div>
+    <div class="card">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvlxCh4RCUt5iu1zBSroVzZBVolOknpNyR6g&usqp=CAU" style="width: 80px;height: 75px;">
+      <a href="/qr-code-decoder" > <button style="margin-top: 10px;">scan</button> </a>
+    </div>
+    <div class="card">
+      <h1>Timing</h1>
+      <h2>Corner</h2>
+    </div>
+   
+</div>
+
+  </body>
+
+
+    {% endblock %}
+</html>

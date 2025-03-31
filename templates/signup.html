@@ -1,0 +1,196 @@
+{% load crispy_forms_tags %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css?family=Montserrat:400,800');
+
+        * { box-sizing: border-box; }
+        body {
+            background: url('https://img.freepik.com/free-vector/white-abstract-background_23-2148806276.jpg?t=st=1737828273~exp=1737831873~hmac=123d8cb2445412f8a78745db97b1fb3c2d4204ab2cacf29d90d0ee87882bc989&w=740') no-repeat center center fixed;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+            margin: 0;
+        }
+        #onwaytickets {
+            font-family: "Pacifico", serif;
+            font-weight: 400;
+            color: dodgerblue;
+            font-style: normal;
+            margin: 15px 0px;
+        }
+
+        h1 { font-weight: bold; margin: 0; }
+        p { font-size: 14px; font-weight: 100; line-height: 20px; letter-spacing: 0.5px; margin: 20px 0 30px; }
+
+        button {
+            border-radius: 20px;
+            border: 1px solid #FF4B2B;
+            background-color: #FF4B2B;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: bold;
+            padding: 12px 45px;
+            margin-top: 20px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: transform 80ms ease-in;
+        }
+        button:active { transform: scale(0.95); }
+
+        form {
+            background-color: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 50px;
+            height: 100%;
+            text-align: center;
+            font-size: small;
+        }
+
+        input {
+            background-color: #eee;
+            border: 0px;
+            border-radius: 6px;
+            padding: 10px 15px;
+            margin: 8px 0;
+            width: 100%;
+        }
+
+        .container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+            width: auto;
+            max-width: 100%;
+            display: flex;
+            flex-direction: row;
+        }
+
+        #padding { padding: 70px 20px; }
+
+        .container1 {
+            width: 300px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%);
+            color: white;
+            text-align: center;
+        }
+
+        a { color: dodgerblue; font-size: x-small; }
+
+        @media screen and (max-width: 480px) {
+            .container1 { display: none; }
+            body { background-image: linear-gradient(-60deg, #ff5858 0%, #f09819 100%); }
+        }
+
+        .error { color: red; font-size: small; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="padding">
+            <!-- Sign Up Form -->
+            <form method="POST">
+                {% csrf_token %}
+                <h1>Sign Up</h1>
+                <span id="onwaytickets">OnWayTickets</span>
+
+                <!-- Display non-field errors -->
+                {% if form.non_field_errors %}
+                    <div class="error">
+                        {% for error in form.non_field_errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Username Field -->
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">
+                        {% for error in form.username.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Email Field -->
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {% if form.email.errors %}
+                    <div class="error">
+                        {% for error in form.email.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- First Name -->
+                {{ form.first_name.label_tag }}
+                {{ form.first_name }}
+
+                <!-- Last Name -->
+                {{ form.last_name.label_tag }}
+                {{ form.last_name }}
+
+                <!-- Password1 -->
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="error">
+                        {% for error in form.password1.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <!-- Password2 -->
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="error">
+                        {% for error in form.password2.errors %}
+                            <p>{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="container1">
+            <h2>Welcome!</h2>
+            <p>Join us and start your journey today.</p>
+        </div>
+    </div>
+
+    <!-- Internet Connection Checker -->
+    <script>
+        window.addEventListener('offline', function () {
+            alert("You are offline! Please check your internet connection.");
+        });
+    </script>
+
+</body>
+</html>
+{% endblock %}

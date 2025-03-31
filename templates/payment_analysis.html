@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        body { background-color: #f8f9fa; }
+        .container { margin-top: 30px; }
+        .card { border-radius: 10px; }
+        .table-responsive { max-height: 400px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 class="text-center text-primary">Payment Analysis</h2>
+
+    <!-- Filter Form -->
+    <form method="GET" class="row g-3 mb-4">
+        <div class="col-md-4">
+            <input type="date" name="date" class="form-control" value="{{ request.GET.date }}">
+        </div>
+        <div class="col-md-4">
+            <input type="month" name="month" class="form-control" value="{{ request.GET.month }}">
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Filter</button>
+        </div>
+        <div class="col-md-2">
+            <button type="button" id="toggleDataBtn" class="btn btn-secondary w-100">Show All Data</button>
+        </div>
+    </form>
+
+    <!-- Summary Cards (Monthly Data by Default) -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card bg-info text-white p-3">
+                <h5>Total Passengers (Monthly)</h5>
+                <h3 id="totalPassengers">{{ total_passengers }}</h3>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card bg-success text-white p-3">
+                <h5>Total Amount Collected (Monthly)</h5>
+                <h3 id="totalAmount">₹ {{ total_amount }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toggle Button for Graphs -->
+    <div class="text-center mb-3">
+        <button id="toggleGraphBtn" class="btn btn-outline-primary">Show Weekly Data</button>
+    </div>
+
+    <!-- Graphs -->
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card p-3">
+                <h5 class="text-center" id="graphTitle">Monthly Data</h5>
+                <canvas id="graphCanvas"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Details Table -->
+    <div class="card p-3 mt-4">
+        <h5 class="text-center">Payment Details</h5>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Passengers</th>
+                        <th>Amount</th>
+                        <th>Stops</th>
+                        <th>Email</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody id="paymentTable">
+                    {% for payment in payments %}
+                    <tr>
+                        <td>{{ payment.payment_id }}</td>
+                        <td>{{ payment.passengers }}</td>
+                        <td>₹ {{ payment.amount }}</td>
+                        <td>{{ payment.stop1 }} → {{ payment.stop2 }}</td>
+                        <td>{{ payment.email }}</td>
+                        <td>{{ payment.date }}</td>
+                        <td>{{ payment.time }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript for Dynamic Graph Switching -->
+<script>
+    var ctx = document.getElementById('graphCanvas').getContext('2d');
+    var isWeekly = false;
+
+    // Initial Monthly Data (Default)
+    var graphData = {
+        labels: [{% for data in monthly_data %} "{{ data.date }}", {% endfor %}],
+        datasets: [{
+            label: 'Total Passengers',
+            data: [{% for data in monthly_data %} {{ data.total_passengers }}, {% endfor %}],
+            backgroundColor: 'blue'
+        }, {
+            label: 'Total Amount',
+            data: [{% for data in monthly_data %} {{ data.total_amount }}, {% endfor %}],
+            backgroundColor: 'green'
+        }]
+    };
+
+    var myChart = new Chart(ctx, {
+        type: 'bar',
+        data: graphData
+    });
+
+    // Toggle Graph Data
+    document.getElementById('toggleGraphBtn').addEventListener('click', function() {
+        if (isWeekly) {
+            // Switch to Monthly
+            myChart.data.labels = [{% for data in monthly_data %} "{{ data.date }}", {% endfor %}];
+            myChart.data.datasets[0].data = [{% for data in monthly_data %} {{ data.total_passengers }}, {% endfor %}];
+            myChart.data.datasets[1].data = [{% for data in monthly_data %} {{ data.total_amount }}, {% endfor %}];
+            document.getElementById('graphTitle').innerText = "Monthly Data";
+            document.getElementById('toggleGraphBtn').innerText = "Show Weekly Data";
+        } else {
+            // Switch to Weekly
+            myChart.data.labels = [{% for data in weekly_data %} "{{ data.date }}", {% endfor %}];
+            myChart.data.datasets[0].data = [{% for data in weekly_data %} {{ data.total_passengers }}, {% endfor %}];
+            myChart.data.datasets[1].data = [{% for data in weekly_data %} {{ data.total_amount }}, {% endfor %}];
+            document.getElementById('graphTitle').innerText = "Weekly Data";
+            document.getElementById('toggleGraphBtn').innerText = "Show Monthly Data";
+        }
+        isWeekly = !isWeekly;
+        myChart.update();
+    });
+
+    // Toggle All Data
+    document.getElementById('toggleDataBtn').addEventListener('click', function() {
+        var table = document.getElementById('paymentTable');
+        if (table.style.display === "none") {
+            table.style.display = "table-row-group";
+            this.innerText = "Show Less Data";
+        } else {
+            table.style.display = "none";
+            this.innerText = "Show All Data";
+        }
+    });
+</script>
+
+</body>
+</html>

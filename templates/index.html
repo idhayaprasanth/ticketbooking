@@ -1,0 +1,801 @@
+{% load static %}
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+  />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap"
+    rel="stylesheet"
+  />
+  <title>OnWayTickets</title>
+  <style>
+    body {
+      background-color: whitesmoke;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    #onwaytickets {
+      font-family: "Pacifico", serif;
+      font-weight: 400;
+      color: dodgerblue;
+      font-style: normal;
+      margin: 15px 0px;
+      padding-right: 8px;
+    }
+
+    .nav {
+      height: 50px;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0px 20px;
+      padding-bottom: 50px;
+      position: relative;
+      background-color: white;
+    }
+
+    .services {
+      display: flex;
+      gap: 45px;
+    }
+
+    .services a {
+      text-decoration: none;
+      color: black;
+      font-size: 14px;
+    }
+
+    .hamburger {
+      display: none;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .mobile-menu {
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 100%;
+      background-color: white;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      padding: 10px 0;
+    }
+
+    .mobile-menu a {
+      padding: 10px 20px;
+      text-decoration: none;
+      color: black;
+      font-size: 14px;
+      border-bottom: 1px solid #ddd;
+    }
+
+    .mobile-menu a:last-child {
+      border-bottom: none;
+    }
+
+    .close-menu {
+      font-size: 24px;
+      cursor: pointer;
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    button {
+      border-radius: 15px;
+      border: 1px solid #ff4b2b;
+      background-color: #ff4b2b;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: bold;
+      padding: 10px 20px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      transition: transform 80ms ease-in;
+      cursor: pointer;
+    }
+
+    button:active {
+      transform: scale(0.95);
+    }
+
+    .content {
+      text-align: center;
+      height: 360px;
+      padding: 20px 200px;
+      background-image: url("{% static 'image/bus.gif' %}");
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+
+    .content p {
+      font-weight: lighter;
+      color: gray;
+      font-size: 16px;
+    }
+
+    .content h1 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .services_container {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      padding: 30px;
+      margin: 10px 0px;
+    }
+
+    .box {
+      width: 80%;
+      height: 200px;
+      padding: 10px;
+      border-radius: 10px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border: 2px;
+      background-color: white;
+    }
+
+    .box p {
+      color: gray;
+      font-size: medium;
+    }
+
+    .box img {
+      width: 35%;
+    }
+    .modal {
+      display: none; /* Initially hidden */
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      width: 80%; /* Default width 80% */
+      max-width: 400px; /* Max width for larger screens */
+      text-align: center;
+      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      font-size: 18px;
+      font-weight: bold;
+    }
+
+    .modal-body {
+      margin: 15px 0;
+      font-size: 14px;
+    }
+
+    .modal-footer {
+      text-align: center;
+    }
+
+    .modal-footer button {
+      background-color: #ff4b2b;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .modal-footer button:hover {
+      background-color: #e04b29;
+    }
+
+    .about-section {
+      background: linear-gradient(to right, #007bff, #00d4ff);
+
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+
+      color: white;
+      padding: 50px 20px;
+      overflow: hidden;
+      margin-top: 50px;
+    }
+
+    .about-section h4 {
+      text-align: center;
+    }
+
+    /* About Cards */
+    .about-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .about-card {
+      background: white;
+      color: #333;
+      padding: 10px;
+      width: 250px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transform: translateX(-100px);
+      transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+    }
+
+    /* Slide-in Animation */
+    .about-card {
+      opacity: 0;
+      transform: translateX(-100px);
+    }
+    .about-card p {
+      font-size: small;
+      margin-left: 15px;
+      color: gray;
+    }
+    .about-card.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .slider-container {
+      position: relative;
+      margin: 10px;
+      margin-top: 30px;
+      height: 200px;
+      overflow: hidden;
+      background: whitesmoke;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      border-radius: 10px;
+    }
+    .review-box {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: #fff;
+      font-size: 16px;
+      color: #333;
+      transition: transform 1s ease-in-out;
+      padding: 15px;
+      box-sizing: border-box;
+      transform: translateX(100%);
+    }
+    .active {
+      transform: translateX(0);
+    }
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 10px;
+    }
+    .profile img {
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+    }
+    .profile-name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .review-text {
+      text-align: center;
+      font-size: 14px;
+    }
+    .rating {
+      color: gold;
+      font-size: 18px;
+      align-self: flex;
+    }
+
+    .contact-section {
+      background-color: #f0f8ff;
+
+      padding: 30px;
+      text-align: center;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      max-width: 600px;
+      margin: auto;
+      margin-top: 30px;
+    }
+
+    .contact-section p {
+      font-size: small;
+      color: #555;
+      margin: 20px 0;
+      font-family: "Verdana", sans-serif;
+    }
+
+    .contact-section .email {
+      font-size: small;
+      color: #0066cc;
+      font-weight: bold;
+      text-decoration: none;
+      border: 2px solid #0066cc;
+      padding: 10px 20px;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+
+    .contact-section .email:hover {
+      background-color: #0066cc;
+      color: white;
+    }
+
+    .contact-section .email:active {
+      background-color: #004d99;
+    }
+
+    /* Popup container */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      z-index: 1000;
+    }
+
+    .popup img {
+      width: 300px;
+    }
+
+    /* Popup overlay */
+    .popup-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    /* Close button */
+    .popup .close-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      float: right;
+    }
+
+    /* Link styling */
+    .track-link {
+      text-decoration: none;
+      color: black;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+    }
+
+    .track-link img {
+      width: 30px;
+      height: 30px;
+      margin-right: 10px;
+    }
+
+    footer {
+      /*background: #4CAF50;*/
+      background-color: dodgerblue;
+      color: white;
+      text-align: center;
+      padding: 20px;
+      width: 90%;
+      bottom: 0;
+      box-shadow: 0 -3px 15px rgba(0, 0, 0, 0.1);
+      font-size: 18px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 50px;
+    }
+
+    /* Footer Icon Style */
+    footer i {
+      font-size: 20px;
+      animation: bounce 0.5s infinite alternate;
+    }
+
+    /* Add creative text style */
+    footer p {
+      font-size: 12px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      margin: 0;
+      text-transform: uppercase;
+      animation: fadeInText 1s ease-out 1;
+    }
+
+    @keyframes bounce {
+      0% {
+        transform: translateY(0);
+      }
+      100% {
+        transform: translateY(-10px);
+      }
+    }
+
+    /* Text fade-in animation */
+    @keyframes fadeInText {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Media Queries for Mobile */
+    @media (max-width: 768px) {
+      #desktop {
+        display: none;
+      }
+      .services {
+        display: none; /* Hide services links on smaller screens */
+      }
+
+      .hamburger {
+        display: block; /* Show hamburger menu */
+      }
+
+      .mobile-menu {
+        display: none; /* Initially hidden */
+      }
+
+      .services_container {
+        flex-direction: column;
+        gap: 0px; /* Make the services containers stack vertically */
+        padding: 30px 0px;
+      }
+
+      .about-container {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .box {
+        width: 96%; /* Ensure boxes take full width on mobile */
+        height: auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around; /* Allow height to adjust based on content */
+      }
+
+      .box a {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none;
+      }
+
+      img {
+        width: 90px;
+      }
+
+      .content {
+        padding: 20px 0px;
+      }
+
+      .nav .services {
+        display: none; /* Hide nav links for mobile view */
+      }
+
+      .nav .hamburger {
+        display: block; /* Show hamburger menu for mobile */
+      }
+      .modal-content {
+        width: 90%; /* Increase width on smaller screens */
+        padding: 15px;
+      }
+
+      .modal-header {
+        font-size: 16px; /* Reduce font size on smaller screens */
+      }
+
+      .modal-body {
+        font-size: 12px; /* Reduce font size */
+      }
+
+      .modal-footer button {
+        padding: 8px 15px; /* Smaller button size */
+        font-size: 14px; /* Adjust font size */
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="nav">
+    <h3 id="onwaytickets">OnWayTickets</h3>
+    <div class="services">
+      <a href="#mobileMenu">Home</a>
+      <a href="#services">Services</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    {% if user.is_authenticated %}
+    <a href="/logout" id="desktop"><button>logout</button></a>
+    {% else %}
+    <a href="/login" id="desktop"><button>Login</button></a>
+    {% endif %}
+    <i class="fas fa-bars hamburger" onclick="toggleMenu()"></i>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div class="mobile-menu" id="mobileMenu">
+    <i class="fas fa-times close-menu" onclick="toggleMenu()"></i>
+    <a href="#">Home</a>
+    <a href="#">Services</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+    {% if user.is_authenticated %}
+    <a href="/logout"><button>logout</button></a>
+    {% else %}
+    <a href="/login"><button>Login</button></a>
+    {% endif %}
+  </div>
+
+  <div class="content">
+    <p id="onwaytickets" style="color: green">
+      Trusted Partner <span class="verification-icon">&#10004;</span>
+    </p>
+    <h1>Instant Bus Ticket Booking Made Easy!</h1>
+
+    <button id="scanBtn" style="margin-top: 180px; padding: 10px 30px">
+      Scan
+    </button>
+  </div>
+
+  <div class="box">
+    <a href="{% url 'get_payments' %}">
+      <img id="img" src="{% static 'image/history.png' %}" />
+      <p>History</p>
+    </a>
+
+    <a href="{% url 'timetable' %}">
+      <img src="{% static 'image/date_range.png' %}" />
+      <p>Timing</p>
+    </a>
+
+    <a href="#" class="track-link" onclick="showPopup(event)">
+      <img src="{% static 'image/location.png' %}" alt="Location" />
+      <p>Track</p>
+    </a>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay"></div>
+
+    <!-- Popup Window -->
+    <div class="popup" id="popupWindow">
+      <button class="close-btn" onclick="closePopup()">X</button>
+      <img src="{% static 'image/processing.jpg' %}" alt="Location" />
+      <p style="color: green">We're fine-tuning the magic. Stay with us!.</p>
+    </div>
+  </div>
+
+  <section class="about-section" id="about">
+    <h4>What Drives Us</h4>
+    <div class="about-container">
+      <div class="about-card">
+        <h5>📌 Easy Ticket Booking</h5>
+        <p>Scan, Pay, Travel! Simple and hassle-free online booking.</p>
+      </div>
+      <div class="about-card">
+        <h5>💳 Secure Payments</h5>
+        <p>Fast, safe, and digital transactions with instant confirmation.</p>
+      </div>
+      <div class="about-card">
+        <h5>🚌 For Bus Owners</h5>
+        <p>Generate unique QR codes & manage ticketing easily.</p>
+      </div>
+      <div class="about-card">
+        <h5>🚀 Future Features</h5>
+        <p>Live tracking & bus scheduling coming soon!</p>
+      </div>
+    </div>
+  </section>
+
+  <h4 style="text-align: center">Hassle-Free Travel Moments</h4>
+  <div class="slider-container">
+    <div class="review-box active">
+      <div class="profile">
+        <img src="{% static 'image/j.png' %}" alt="Profile" />
+        <span class="profile-name">John Doe</span>
+      </div>
+      <div class="review-text">
+        I love the paperless ticketing feature! No more lost tickets or
+        confusion. Plus, the fare calculation is transparent and fair.
+      </div>
+      <div class="rating">★★★★★</div>
+    </div>
+    <div class="review-box">
+      <div class="profile">
+        <img src="{% static 'image/j.png' %}" alt="Profile" />
+        <span class="profile-name">Jane Smith</span>
+      </div>
+      <div class="review-text">
+        This online bus ticketing system is a game-changer! The QR code feature
+        makes it so easy to book tickets, and I no longer have to carry cash.
+        Highly recommended!
+      </div>
+      <div class="rating">★★★★☆</div>
+    </div>
+    <div class="review-box">
+      <div class="profile">
+        <img src="{% static 'image/m.png' %}" alt="Profile" />
+        <span class="profile-name">Michael Brown</span>
+      </div>
+      <div class="review-text">
+        Great initiative for public transport! The payment system is secure, and
+        I receive my digital ticket instantly. Would love to see live tracking
+        in future updates!
+      </div>
+      <div class="rating">★★★★★</div>
+    </div>
+    <div class="review-box">
+      <div class="profile">
+        <img src="{% static 'image/d.png' %}" alt="Profile" />
+        <span class="profile-name">Divya Iyer</span>
+      </div>
+      <div class="review-text">
+        I appreciate the eco-friendly approach of this system. Paperless tickets
+        and secure online payments make public transport hassle-free.
+      </div>
+      <div class="rating">★★★★★</div>
+    </div>
+    <div class="review-box">
+      <div class="profile">
+        <img src="{% static 'image/d.png' %}" alt="Profile" />
+        <span class="profile-name">Aarav Kumar</span>
+      </div>
+      <div class="review-text">
+        The best part is the QR code scanning—super fast and efficient. It saves
+        me a lot of time during my daily commute.
+      </div>
+      <div class="rating">★★★★★</div>
+    </div>
+  </div>
+
+  <div class="contact-section" id="contact">
+    <h4>Get in Touch with Our Team</h4>
+    <p>
+      We'd love to hear from you! If you have any questions or need assistance,
+      reach out to us via email.
+    </p>
+    <a href="mailto:idhayaprasanth56@gmail.com" class="email">Email Us</a>
+  </div>
+
+  <!-- Custom Modal -->
+  <div id="loginModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>Login Required</h3>
+      </div>
+      <div class="modal-body">
+        <p>You must log in to use the scan option.</p>
+      </div>
+      <div class="modal-footer">
+        <button onclick="window.location.href='/login'">Log In</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <i class="fas fa-smile"></i>
+    <p>Your satisfaction is our priority!</p>
+  </footer>
+
+  <script>
+
+    function showPopup(event) {
+                event.preventDefault();
+                document.getElementById("popupWindow").style.display = "block";
+                document.getElementById("popupOverlay").style.display = "block";
+            }
+
+            function closePopup() {
+                document.getElementById("popupWindow").style.display = "none";
+                document.getElementById("popupOverlay").style.display = "none";
+            }
+
+        // This variable is set based on whether the user is authenticated
+        var isLoggedIn = {% if user.is_authenticated %} true {% else %} false {% endif %};
+
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            mobileMenu.style.display = (mobileMenu.style.display === 'flex') ? 'none' : 'flex';
+        }
+
+        // Handle the Scan button click
+        document.getElementById('scanBtn').addEventListener('click', function() {
+            if (!isLoggedIn) {
+                // Show custom modal if user is not logged in
+                document.getElementById('loginModal').style.display = 'flex';
+            } else {
+                // Allow scan functionality if user is logged in
+                window.location.href = "/qr-code-decoder"; // Redirect to scan page or trigger scan functionality
+            }
+        });
+
+        // Close the modal if user clicks anywhere outside of the modal content
+        window.onclick = function(event) {
+            var modal = document.getElementById('loginModal');
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+
+        const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('show');
+                    } else {
+                        entry.target.classList.remove('show'); // Reset animation
+                    }
+                });
+            }, { threshold: 0.2 }); // Adjust threshold to trigger when 20% of the section is visible
+
+            const cards = document.querySelectorAll('.about-card');
+            cards.forEach(card => observer.observe(card));
+
+
+            let currentIndex = 0;
+            const reviews = document.querySelectorAll('.review-box');
+            const totalReviews = reviews.length;
+
+            function showNextReview() {
+                reviews[currentIndex].classList.remove('active');
+                reviews[currentIndex].style.transform = 'translateX(-100%)';
+
+                currentIndex = (currentIndex + 1) % totalReviews;
+
+                reviews[currentIndex].style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    reviews[currentIndex].classList.add('active');
+                    reviews[currentIndex].style.transform = 'translateX(0)';
+                }, 50);
+            }
+
+            setInterval(showNextReview, 3000);
+  </script>
+</body>
